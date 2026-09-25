@@ -1,0 +1,12 @@
+node_modules/
+dist/
+_site/
+.DS_Store
+Thumbs.db
+*.log
+.env
+.env.local
+.vercel
+.netlify
+.idea/
+.vscode/

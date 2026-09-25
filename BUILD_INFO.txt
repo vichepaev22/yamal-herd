@@ -1,0 +1,12 @@
+PROJECT    : ЯМАЛ: СОБЕРИ СТАДО / YAMAL HERD
+VERSION    : 4.2.0
+FILE       : index.html
+SHA256     : 499c6255980e2fd5907f565f75a262ce5069cd2ea550e60081dbbd4350f671ec
+SIZE       : 197406 bytes
+LINES      : 2891
+BUILT      : 2026-09-25T07:57:29Z
+ENGINE     : three.js 0.160.0 (CDN fallback: jsdelivr → unpkg → esm.sh → skypack)
+CONTENT    : tutorial + 30 levels (3 chapters) · 4 characters · 4 upgrades · camp dog FSM ·
+             delivery patterns · child mode math · radar pulse · weather phases ·
+             collectibles/berries · PWA · InputController (keyboard/touch/gamepad) ·
+             localStorage save v1..v4 migration

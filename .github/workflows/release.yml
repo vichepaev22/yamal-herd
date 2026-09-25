@@ -1,0 +1,29 @@
+name: Release
+
+on:
+  push:
+    tags: ['v*']
+
+permissions:
+  contents: write
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Package
+        run: |
+          mkdir -p out
+          cp index.html manifest.webmanifest robots.txt sitemap.xml 404.html out/ 2>/dev/null || true
+          cp -R public out/public
+          cp -R docs out/docs
+          cp README.md LICENSE out/
+          cd out && zip -r ../yamal-herd-${GITHUB_REF_NAME}.zip . && cd ..
+          sha256sum yamal-herd-${GITHUB_REF_NAME}.zip > yamal-herd-${GITHUB_REF_NAME}.zip.sha256
+      - uses: softprops/action-gh-release@v2
+        with:
+          files: |
+            yamal-herd-${{ github.ref_name }}.zip
+            yamal-herd-${{ github.ref_name }}.zip.sha256
+          generate_release_notes: true

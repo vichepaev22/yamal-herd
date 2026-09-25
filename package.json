@@ -1,0 +1,20 @@
+{
+  "name": "yamal-herd",
+  "version": "4.2.0",
+  "private": true,
+  "description": "ЯМАЛ: СОБЕРИ СТАДО — stylized low-poly 3D arcade (three.js, single-file, mobile-ready)",
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host",
+    "build": "vite build",
+    "preview": "vite preview --host",
+    "serve": "python3 -m http.server 8080",
+    "verify": "python3 scripts/verify.py",
+    "size": "bash scripts/size-report.sh",
+    "test": "npm run verify"
+  },
+  "keywords": ["threejs","game","arcade","3d","pwa","mobile-web","yamal","snake-like"],
+  "license": "MIT",
+  "devDependencies": { "vite": "^5.4.0" },
+  "engines": { "node": ">=18" }
+}

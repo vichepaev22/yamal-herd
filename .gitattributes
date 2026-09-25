@@ -1,0 +1,6 @@
+* text=auto eol=lf
+*.html  linguist-language=HTML
+*.js    linguist-language=JavaScript
+*.mjs   linguist-language=JavaScript
+*.svg   linguist-detectable=true
+*.png   binary
