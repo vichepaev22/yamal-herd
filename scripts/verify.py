@@ -70,7 +70,8 @@ if missing: fail.append(f'JS обращается к несуществующи�
 else: print(f'   DOM-id: {len(used)} обращений, все присутствуют ({len(ids_html)} id в разметке)')
 
 # ── 3. уровни: tutorial + 30, без пропусков и дублей ────────────────────────
-lv = [int(x) for x in re.findall(r'\{id:(\d+),name:', s)]
+# Уровни определяются по наличию поля count (главы id 1–3 его не имеют).
+lv = [int(x) for x in re.findall(r'\{id:(\d+),name:[^}]*?count:', s)]
 if not lv: fail.append('список LEVELS не найден')
 else:
     if sorted(lv) != list(range(0, max(lv)+1)): fail.append(f'пропуски/дубли в LEVELS: {sorted(lv)}')
