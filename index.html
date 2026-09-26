@@ -341,6 +341,60 @@ kbd{background:rgba(255,255,255,.13);border:1px solid rgba(255,255,255,.22);bord
 .obj-s::before{content:'→ ';opacity:.6}
 #objective.done{border-color:rgba(126,230,176,.5)}
 #objective.done .obj-p{color:#7ee6b0}
+/* ── MOBILE OBJECTIVE BAR (touch only; §5–§28) ───────────────────────────── */
+body.touch #objective{top:auto;left:calc(50% + env(safe-area-inset-left)/2 - env(safe-area-inset-right)/2);
+  bottom:calc(10px + env(safe-area-inset-bottom));transform:var(--obj-tx,translateX(-50%));
+  width:auto;min-width:200px;max-width:min(46vw,340px);padding:7px 14px;border-radius:14px;text-align:left;cursor:pointer;
+  background:linear-gradient(160deg,rgba(18,40,66,.5),rgba(8,20,36,.55));  /* §27 чуть прозрачнее */
+  transition:transform .28s cubic-bezier(.25,1.2,.35,1),padding .28s,opacity .28s;
+  pointer-events:auto;touch-action:manipulation;--obj-tx:translateX(-50%)}
+body.touch #objective .obj-k{display:none}                       /* §6 не показываем слово ЗАДАЧА */
+body.touch #objective .obj-t{display:none}                        /* компакт: заголовок скрыт    */
+body.touch #objective .obj-pat{margin-top:4px;justify-content:flex-start}
+body.touch #objective .obj-s{margin-top:2px;font-size:12px;letter-spacing:0}
+body.touch #objective .obj-s::before{content:'🎯 ';font-size:13px}  /* §6 иконка вместо ЗАДАЧА   */
+body.touch #objective .obj-row{display:flex;align-items:baseline;justify-content:space-between;gap:12px}
+body.touch #objective .obj-p{font-size:clamp(13px,3.6vw,15px);margin-top:2px;flex:0 0 auto}
+/* expanded-состояние (§10): появляется при смене цели / tap / старте уровня */
+body.touch #objective.exp{padding:11px 16px;border-radius:17px;
+  transform:var(--obj-tx,translateX(-50%)) translateY(-6px) scale(1.04)}
+body.touch #objective.exp .obj-k{display:block;font-size:8px;letter-spacing:.24em}
+body.touch #objective.exp .obj-k::before{content:''}
+body.touch #objective.exp .obj-t{display:block;font-size:13px;margin-top:3px}
+body.touch #objective.exp .obj-s{margin-top:6px}
+/* кратковременный акцент при смене цели (§9): плавный fade+lift, 300 мс.
+   --obj-tx подставляет якорный сдвиг (центр/лево/право) — раскладки не конфликтуют */
+body.touch #objective.flash{animation:objBarFlash .32s cubic-bezier(.2,1.3,.4,1)}
+@keyframes objBarFlash{from{opacity:.35;transform:var(--obj-tx,translateX(-50%)) translateY(4px) scale(.98)}
+  to{opacity:1;transform:var(--obj-tx,translateX(-50%)) translateY(-6px) scale(1.04)}}
+/* конфликты (§13–§15): радар справа, джойстик справа-снизу, стамина слева-снизу,
+   Sprint-кнопка левее джойстика. Панель центрирована и ограничена 46vw/340px,
+   т.е. всегда заканчивается левее центра + радара. */
+/* phone landscape (маленькая высота): панель над стаминой (hud-bl) и левее Sprint */
+@media (max-height:560px){
+  body.touch #objective{left:auto;right:calc(min(46vw,320px) + 112px);
+    --obj-tx:none;transform:var(--obj-tx);
+    min-width:0;max-width:calc(100vw - min(46vw,320px) - 250px);
+    bottom:calc(56px + env(safe-area-inset-bottom))}
+}
+/* phone portrait (§31): панель над нижним HUD-блоком, по центру; ориент-оверлей её не трогает */
+@media (max-height:560px) and (max-width:500px){
+  body.touch #objective{width:calc(100vw - 24px);max-width:none;left:50%;right:auto;
+    --obj-tx:translateX(-50%);transform:var(--obj-tx);padding:6px 12px}}
+/* portrait (любой): левый якорь над стаминой, до колонки радара — низ в портрете плотно занят.
+   Ширина 44vw + min-width:0 оставляют зазор до joyZone (та начинается с ~54vw). */
+@media (orientation:portrait){
+  body.touch #objective{left:calc(12px + env(safe-area-inset-left));right:auto;--obj-tx:none;transform:var(--obj-tx);
+    bottom:calc(160px + env(safe-area-inset-bottom));width:min(170px,44vw);min-width:0;max-width:none}}
+@media (orientation:portrait) and (min-width:600px){
+  body.touch #objective{width:min(300px,60vw)}}
+/* 1024×768 и прочие средние landscape-экраны с touch: панель левее Sprint (right:336px).
+   Сдвигаем центр влево от кнопки: панель прижата правым краем к 46vw-зоне джойстика минус запас. */
+@media (min-width:900px) and (max-height:820px){
+  body.touch #objective{left:auto;right:calc(min(46vw,320px) + 130px);--obj-tx:none;transform:var(--obj-tx)}
+}
+body.touch #objective.yield{opacity:.35;transform:var(--obj-tx,translateX(-50%)) translateY(12px)}
+
 #mathCard{position:absolute;left:50%;bottom:calc(140px + env(safe-area-inset-bottom));
   transform:translateX(-50%) scale(.92);opacity:0;transition:opacity .25s,transform .25s;pointer-events:none;
   text-align:center;padding:14px 26px 15px;border-radius:22px;min-width:270px;
@@ -425,8 +479,11 @@ body.touch .hud-tr{top:calc(56px + env(safe-area-inset-top));right:calc(60px + e
 body.touch .chip.cnt b{font-size:15px}
 body.touch #pauseBtn{top:calc(10px + env(safe-area-inset-top));right:calc(10px + env(safe-area-inset-right))}
 body.touch #toast{top:auto;bottom:calc(46vh + 6px)}
-body.touch #objective{top:calc(96px + env(safe-area-inset-top));bottom:auto;left:50%;width:min(370px,74vw);padding:8px 14px}
+/* ── старое touch-положение Objective (сверху, почти центр) — заменено нижней Bar */
 body.touch #hint{top:calc(176px + env(safe-area-inset-top));bottom:auto}
+/* §24 dog notification — тост над Objective Bar, не поверх неё */
+body.touch #dogToast{position:absolute;top:auto;bottom:calc(64px + env(safe-area-inset-bottom));
+  left:calc(12px + env(safe-area-inset-left));max-width:calc(60vw - 20px)}
 body.touch #mathCard{top:30%;bottom:auto}
 body.touch #dogInd{top:44%}
 body.touch .hud-bl{left:calc(12px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));
@@ -441,7 +498,6 @@ body.touch #joyZone{height:42vh}
 }
 @media (max-height:560px){
   body.touch #herdPanel{bottom:calc(118px + env(safe-area-inset-bottom));transform:scale(.76)}
-  body.touch #objective{top:calc(74px + env(safe-area-inset-top));width:min(320px,60vw)}
   body.touch #hint{top:calc(146px + env(safe-area-inset-top))}
   body.touch .hud-bl{width:min(140px,30vw)}
   .menu-inner{gap:9px}.title{font-size:clamp(38px,10vw,54px)}.btn{padding:10px 14px;font-size:12px}
@@ -658,9 +714,8 @@ body.touch #joyZone{height:42vh}
   <div id="objective">
     <div class="obj-k">ЗАДАЧА</div>
     <div class="obj-t" id="objT">Собери и приведи оленей</div>
-    <div class="obj-p" id="objP">0 / 3</div>
+    <div class="obj-row"><div class="obj-s" id="objS">Найди свободных оленей</div><div class="obj-p" id="objP">0 / 3</div></div>
     <div class="obj-pat" id="objPat" style="display:none"></div>
-    <div class="obj-s" id="objS">Найди свободных оленей</div>
   </div>
   <div id="herdPanel">
     <div class="herd-nums">
@@ -1821,7 +1876,22 @@ class Engine{
   else step='Найди свободных оленей — сигналы на радаре'
   const ttl=L.pattern?('План рейсов · группа '+Math.min(this.patternIdx+1,L.pattern.length)+' из '+L.pattern.length)
     :'Доставить оленей в стойбище'
-  return{title:ttl,prog:s.delivered+' / '+L.required,step:step,done:done,need:need}}
+  /* §19 SHORT COPY для mobile: компактные формулировки Objective Bar */
+  let stepM
+  if(L.tutorial){
+    if(this.tutStep===0)stepM='Подойди к оленю'
+    else if(this.tutStep===1)stepM='Олень идёт за тобой'
+    else if(this.tutStep===2)stepM='Собери ещё '+(L.count-h)
+    else if(this.tutStep===3)stepM='Веди стадо к чуму'
+    else{stepM='Стадо собрано!';done=true}}
+  else if(s.delivered>=L.required)stepM='Уровень пройден'
+  else if(h>=need)stepM='Возвращайся в стойбище'
+  else if(h>0)stepM='Собери ещё '+(need-h)
+  else if(this.dog&&this.dog.state==='HERD_ASSIST'&&this.dog.assist.length)stepM='Собака ведёт оленя'
+  else stepM='Найди оленей'
+  const ttlM=L.pattern?('Рейсы '+Math.min(this.patternIdx+1,L.pattern.length)+'/'+L.pattern.length):'Доставь оленей'
+  return{title:ttl,prog:s.delivered+' / '+L.required,step:step,done:done,need:need,
+    titleM:ttlM,stepM:stepM,needM:need,delivM:s.delivered,reqM:L.required}}
  checkWin(){if(this.stats.delivered>=this.level.required&&this.state==='playing'){
    this.state='complete'
    for(const d of this.herd){d.state=ST.DELIVERED;d.timer=0}
@@ -2402,6 +2472,27 @@ function onPauseRequest(){
 
 /* ═════════ HUD ═════════ */
 let lastObj='',lastHerd=-1,lastDel=-1,lastBerry=-1,lastMathSig='',lastPat='',lastDogMsg=''
+/* ── §9–§11, §21: mobile Objective Bar — expanded-состояние и tap-to-expand ── */
+let objExpT=0
+function objExpand(ms){
+  if(!IS_TOUCH)return
+  const el=$('objective');if(!el)return
+  el.classList.add('exp')
+  clearTimeout(objExpT)
+  objExpT=setTimeout(()=>el.classList.remove('exp'),ms||2400)}
+function objCollapse(){$('objective')&&$('objective').classList.remove('exp');clearTimeout(objExpT)}
+function initObjectiveBar(){
+  if(!IS_TOUCH)return
+  const el=$('objective');if(!el)return
+  /* §21 tap-to-expand; повторный tap или авто-сворачивание через 3.5 c */
+  el.addEventListener('pointerdown',ev=>{
+    ev.stopPropagation()
+    if(el.classList.contains('exp')&&objExpT&&el.dataset.user){objCollapse();el.dataset.user='';return}
+    el.dataset.user='1'
+    /* полная информация в expanded (§20): desktop-формулировки */
+    const e2=engine;if(e2){const ob=e2.objective()
+      $('objT').textContent=ob.title;$('objS').textContent=ob.step}
+    objExpand(3500)})}
 function calmState(v){for(const s of CALM_STATES)if(v>=s.min)return s;return CALM_STATES[CALM_STATES.length-1]}
 function syncHUD(){
   if(!engine)return
@@ -2430,9 +2521,17 @@ function syncHUD(){
   const ob=e.objective()
   const sig=ob.prog+'|'+ob.step
   if(sig!==lastObj){lastObj=sig
-    $('objT').textContent=ob.title;$('objP').textContent=ob.prog;$('objS').textContent=ob.step
-    const el=$('objective');el.classList.toggle('done',ob.done)
-    el.classList.remove('anim');void el.offsetWidth;el.classList.add('anim')}
+    const el=$('objective')
+    if(IS_TOUCH){
+      /* §9–§11 mobile: компактная строка + краткое раскрытие при смене цели */
+      $('objT').textContent=ob.titleM;$('objP').textContent=ob.prog;$('objS').textContent=ob.stepM
+      el.classList.toggle('done',ob.done)
+      el.classList.remove('flash');void el.offsetWidth;el.classList.add('flash')
+      objExpand(2400)                       /* раскрыть на ~2.4 c, затем компакт */
+    }else{
+      $('objT').textContent=ob.title;$('objP').textContent=ob.prog;$('objS').textContent=ob.step
+      el.classList.toggle('done',ob.done)
+      el.classList.remove('anim');void el.offsetWidth;el.classList.add('anim')}}
   const pat=e.level.pattern
   if(pat){
     const psig=pat.join(',')+'|'+e.patternIdx
@@ -2471,8 +2570,11 @@ function syncHUD(){
       $('mEq').innerHTML=mth.a+' <span class="plus">+</span> '+mth.b+' <span class="eqs">=</span> '+mth.c
       $('mPhrase').textContent=mth.phrase;$('mSub').textContent=mth.sub
       mc.classList.remove('pop');void mc.offsetWidth;mc.classList.add('pop')}
-    mc.classList.add('show')}
-  else{if(lastMathSig!=='')lastMathSig='';mc.classList.remove('show')}
+    mc.classList.add('show')
+    /* §23 Child Mode: Math Card приоритетнее — Objective Bar уступает место */
+    if(IS_TOUCH)$('objective').classList.add('yield')}
+  else{if(lastMathSig!=='')lastMathSig='';mc.classList.remove('show')
+    if(IS_TOUCH)$('objective').classList.remove('yield')}
   $('campFlash').style.opacity=(e.inCamp&&e.herd.length>=e.curMin())?'.9':'0'
   if(e.level.wind>.05){$('hWind').style.display='flex'
     $('hWindArrow').style.transform='rotate('+(-e.wind.a*180/Math.PI).toFixed(1)+'deg)'
@@ -2613,8 +2715,12 @@ function startLevel(id){
   updateCamBasis()
   mode='game';paused=false;lastResult=null
   lastObj='';lastHerd=-1;lastDel=-1;lastBerry=-1;lastMathSig='';lastPat='';lastDogMsg=''
+  objCollapse()
+  initObjectiveBar()
   perf.step=0;perf.cool=0;perf.shadowOff=false;perf.dprCap=2
-  show('game');syncHUD();drawMap()}
+  show('game');syncHUD();drawMap()
+  /* §11 начало уровня: на mobile кратко показать полную задачу, затем компакт */
+  if(IS_TOUCH)setTimeout(()=>{if(mode==='game'&&engine)objExpand(2800)},400)}
 function showComplete(r,L){
   $('wKick').textContent='УРОВЕНЬ '+L.id+' · '+L.name+' · '+chapterOf(L.id).name
   const finale=(L.id===LEVELS.length-1)
