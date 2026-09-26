@@ -7,7 +7,7 @@ export default defineConfig({
   publicDir: false,          // public/ копируется как есть (CI делает это для Pages)
   build: {
     outDir: 'dist',
-    target: 'es2020',
+    target: 'es2022',        // top-level await в three.js-лоадере игры требует es2022+
     assetsInlineLimit: 0,
     reportCompressedSize: true
   },
