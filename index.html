@@ -481,15 +481,27 @@ body.touch #pauseBtn{top:calc(10px + env(safe-area-inset-top));right:calc(10px +
 body.touch #toast{top:auto;bottom:calc(46vh + 6px)}
 /* ── старое touch-положение Objective (сверху, почти центр) — заменено нижней Bar */
 body.touch #hint{top:calc(176px + env(safe-area-inset-top));bottom:auto}
-/* §24 dog notification — тост над Objective Bar, не поверх неё */
-body.touch #dogToast{position:absolute;top:auto;bottom:calc(64px + env(safe-area-inset-bottom));
-  left:calc(12px + env(safe-area-inset-left));max-width:calc(60vw - 20px)}
+/* §9 calm: на touch компактно — только линия и %, текст состояния оставляем для tooltip/hover */
+body.touch .calm-state{display:none}
+body.touch .calm-head{margin-bottom:2px}
+body.touch .calm-head span{font-size:8px}
+body.touch .calm-head b{font-size:10.5px}
+
+/* §31 dog notification — маленький тост над Objective Bar (нижний центр), не в центре экрана */
+body.touch #dogToast{position:absolute;top:auto;bottom:calc(58px + env(safe-area-inset-bottom));
+  left:50%;transform:translateX(-50%);max-width:calc(100vw - 24px)}
+
 body.touch #mathCard{top:30%;bottom:auto}
 body.touch #dogInd{top:44%}
 body.touch .hud-bl{left:calc(12px + env(safe-area-inset-left));bottom:calc(16px + env(safe-area-inset-bottom));
-  top:auto;width:min(170px,38vw)}
+  top:auto;width:min(150px,32vw)}
+/* §12 стамина: тонкая полоска без большой панели-фона */
+body.touch .hud-bl .g-label{font-size:8.5px;margin-bottom:3px}
+body.touch .hud-bl .bar{height:5px}
+/* §7–§8 herdPanel/радар: компактнее на ~20%, полупрозрачнее, не громоздкий прямоугольник */
 body.touch #herdPanel{right:calc(10px + env(safe-area-inset-right));
-  bottom:calc(150px + env(safe-area-inset-bottom));width:186px;transform:scale(.88);transform-origin:bottom right}
+  bottom:calc(150px + env(safe-area-inset-bottom));width:186px;transform:scale(.78);transform-origin:bottom right;
+  background:linear-gradient(160deg,rgba(20,44,72,.42),rgba(8,20,36,.5));box-shadow:0 10px 24px rgba(0,0,0,.26)}
 body.touch #joyZone{height:42vh}
 @media (max-width:860px){
   .lvl-grid{grid-template-columns:repeat(auto-fill,minmax(146px,1fr))}
